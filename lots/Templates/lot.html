@@ -1,0 +1,85 @@
+{% extends 'main.html' %}
+{% load staticfiles %}
+{% block lot %}
+     <div class="row">
+
+              <div class="large-6 columns">
+
+                <img src={{lot.FonPicture.url}} width="250" height="250"><br>
+                  {%if user.username%}
+                 <a href="/lots/addlike/{{lot.id}}/"><img src="{%static "images.png"%}" width="20" height="20" /></a> {{like_count}}
+                  {% endif %}
+              </div>
+
+         <div class="large-6 columns">
+
+
+                <div class="panel">
+                  <h2 class="hide-for-small">{{lot.Name}}<hr/></h2>
+                   Опис лоту:
+                <h5 class="subheader">{{lot.Description}}</h5>
+                    Стан аукціону :
+                    {% if lot.type_lot = 0 %}
+                      <h5 class="subheader">реєстрація учасників</h5>
+                      {% elif lot.type_lot = 1 %}
+                      <h6 class="subheader">очікування старту</h6>
+                      {% elif lot.type_lot = 2 %}
+                      <h6 class="subheader">активний</h6>
+                    {% elif lot.type_lot = 3 %}
+                      <h5 class="subheader">продано</h5>
+                      {% endif %}
+                     Дата публікації:<h5 class="subheader">{{lot.pub_date}}</h5>
+                    Поточна ціна: <h5 class="subheader">{{now_price}}</h5>
+                    Мінімальний крок: <h5 class="subheader">{{lot.min_stage}}</h5>
+
+                </div>
+
+             <div class="row">
+                 <div class="medium-5 columns">
+
+                 {% if lot.type_lot = 0 and user.username = lot.user.username%}
+
+                    <a href="/lot/edit/{{lot.id}}/" class="small button">Редагувати</a>
+                  </div>
+                 <a href="/lot/delete/{{lot.id}}/" class="small button">Видалити</a>
+                 {% endif %}
+                 {% if lot.type_lot = 0 and user.username != lot.user.username and user.username %}
+                 {% if reg_r %}
+                     <a href="/lot/register/{{lot.id}}/" class="small button">Реєструватися</a>
+                 {% else %}
+                    <h5>Ви зареєстровані
+                        Очікуйте старту аукціону</h5>
+                 {% endif %}
+                 {% endif %}
+                 </div>
+             </div>
+         </div>
+<div class="row">
+<div class="large-4 columns">
+    <h5 class="subheader">Коментарі</h5>
+{% for comment in comments %}
+    <p>{{comment.text}} <font face="arial, verdana, courier"> (автор: {{comment.user.username}})</font></p>
+{% endfor %}
+    {%if user.username%}
+        <form action="/lots/addcomment/{{lot.id}}/" method="post">
+        {% csrf_token  %}
+        {{ form }}
+        <input type="submit" class="button" value="Добавити коментарій">
+        </form>
+    {%endif%}
+    </div>
+    <div class="large-6 columns">
+        <h5 class="subheader">Ставки</h5>
+        {% for rate in rates %}
+    <p>{{rate.price}} <font face="arial, verdana, courier"> (автор: {{rate.user.username}})</font></p>
+        {% endfor %}
+{%if reg and lot.type_lot = 2%}
+        <form action="/lots/addrate/{{lot.id}}/" method="post">
+        {% csrf_token  %}
+        {{ rate_form }}
+        <input type="submit" class="button" value="Зробити ставку">
+        </form>
+    {%endif%}
+</div>
+    </div>
+{% endblock %}

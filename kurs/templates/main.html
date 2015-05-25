@@ -1,0 +1,69 @@
+{% load staticfiles %}
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Курсач</title>
+    <link rel="stylesheet" type="text/css" href="{% static "static/css/foundation.css" %}">
+    <script src="{%static "static/js/flotr2.js"%}"></script>
+    <script src="{%static "static/js/flotr2.min.js"%}"></script>
+    <script src="{%static "static/js/myFunc.js"%}"></script>
+</head>
+<body>
+<div class="row">
+            <div class="large-12 columns">
+
+              <nav class="top-bar" data-topbar>
+                <ul class="title-area">
+
+                  <li class="name">
+                    <h1>
+                      <a href="/">
+                        Аукціон
+                      </a>
+                    </h1>
+                  </li>
+                  <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+                </ul>
+
+                <section class="top-bar-section">
+                     <ul class="right">
+                {% if user.username %}
+
+                    <li class="divider"></li>
+                    <li><a href="/add/lot/">Створити лот</a></li>
+                    <li class="divider"></li>
+                    <li>
+                      <a href="/addmoney/">Поповнити рахунок</a>
+
+                    </li>
+
+                        <li><a href="/auth/logout/">Вихід({{user.username}})</a></li>
+                      {%else%}
+                        <li><a href="/auth/login/">Вхід</a></li>
+                      {%endif%}
+                  </ul>
+
+
+
+                </section>
+              </nav>
+    {% block lot%}{% endblock %}
+{%if user.username %}
+    {% block profile %}{% endblock %}
+      {% block statistics %}{% endblock %}
+{% endif %}
+{% block lots%}{% endblock %}
+
+          </div>
+
+
+
+
+</div>
+<div class="row">
+{% block login %}{% endblock %}
+
+    {% block new_lot%}{% endblock %}
+    </div>
+</body>
+</html>

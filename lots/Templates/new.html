@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+{% block new_lot %}
+<div class="large-offset-1 large-8 columns">
+    <h4 class="hide-for-small">{{name_form}}<hr/></h4>
+<form method="post" enctype="multipart/form-data">
+{% csrf_token  %}
+{{ form }}
+<input type="submit" class="button" value="Добавити">
+</form>
+</div>
+{% endblock %}
